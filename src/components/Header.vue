@@ -1,66 +1,95 @@
 <script setup>
+import { ref } from "vue";
+import Popover from "@/components/Popover.vue";
 
+const activeItem = ref(1);
+const navigationItems = ["Общее", "Товары", "Доп. расходы"];
+const isOpenList = ref(false);
+
+const setActiveItem = (index) => {
+  activeItem.value = index;
+};
+
+const toggleList = () => {
+  isOpenList.value = !isOpenList.value;
+};
 </script>
 
 <template>
   <div>
-    <h1 class="main-title">
-      Проведение ТО и мелкий ремонт
-    </h1>
+    <h1 class="main-title">Проведение ТО и мелкий ремонт</h1>
     <div class="navbar">
       <ul class="navigation">
-        <li class="navigation_item">Общее</li>
-        <li class="navigation_item active">Товары</li>
-        <li class="navigation_item">Доп. расходы</li>
+        <li
+          v-for="(item, index) in navigationItems"
+          :key="index"
+          @click="setActiveItem(index)"
+          :class="{ navigation_item: true, active: activeItem === index }"
+        >
+          {{ item }}
+        </li>
       </ul>
-      <div class="gear_wrapper">
-        <img class="gear_icon" src="../assets/icons/32131Combined%20Shape.svg" alt="Combined Shape">
+      <div class="gear_wrapper" @click="toggleList">
+        <img
+          class="gear_icon"
+          src="../assets/icons/32131Combined%20Shape.svg"
+          alt="Combined Shape"
+        />
+        <div class="popover_wrapper" v-show="isOpenList">
+          <Popover />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <style scoped>
-.main-title{
+.main-title {
   font-size: 30px;
-  margin-bottom: 25px;
+  margin: 16px 0;
 }
 
-.navbar{
+.navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.navigation{
+.navigation {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0;
 }
 
-.navigation_item{
-  color: #1253a2;
+.navigation_item {
   font-weight: 600;
   list-style: none;
   padding-right: 23px;
+  cursor: pointer;
+  color: #1253a2;
 }
 
-.active{
-  color: #000;
+.active {
+  color: black;
 }
 
-.gear_wrapper{
-  flex-grow: 1;
-  text-align: end;
+.gear_wrapper {
+  margin-right: 15px;
+  padding: 5px;
+  cursor: pointer;
+  position: relative;
 }
 
-.gear_icon{
-  width: 15px;
-  height: 15px;
-  object-fit: contain;
+.popover_wrapper {
+  position: absolute;
+  top: 26px;
+  right: 0;
 }
 
-
+@media only screen and (max-width: 400px) {
+  .gear_wrapper {
+    display: none;
+  }
+}
 </style>
