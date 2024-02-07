@@ -4,3 +4,15 @@
     max-width: 1728px;
     margin: 0 auto;
 }
+
+
+.ag-header-cell-resize::after{
+    width: 1px !important;
+    height:100% !important;
+    background-color: #eeeff1 !important;
+    top: 0 !important;
+}
+
+.ag-header-viewport{
+    background: #ffffff !important;
+}

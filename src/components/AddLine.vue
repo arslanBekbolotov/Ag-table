@@ -1,8 +1,10 @@
-<script></script>
+<script setup>
+import { appendCell } from "@/factory.js";
+</script>
 
 <template>
   <div class="add-line-block">
-    <button class="add-line-btn">
+    <button class="add-line-btn" @click="appendCell">
       <img
         class="icon-plus"
         src="../assets/icons/312312313Combined Shape.svg"
