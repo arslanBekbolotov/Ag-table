@@ -5,6 +5,9 @@
     margin: 0 auto;
 }
 
+.ag-root-wrapper{
+   border: none !important;
+}
 
 .ag-header-cell-resize::after{
     width: 1px !important;
@@ -15,4 +18,30 @@
 
 .ag-header-viewport{
     background: #ffffff !important;
+}
+
+.ag-header-cell-text{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.ag-cell{
+    cursor: pointer;
+}
+
+.ag-column-first{
+    display: flex !important;
+    align-items: center !important;
+}
+
+.ag-drag-handle{
+    margin-right: 5px !important;
+}
+
+.ag-icon-grip::before {
+    content: "" !important;
+    display: block !important;
+    background: url("../assets/icons/32143241223Combined Shape.svg") no-repeat center;
+    width: 16px;
+    height: 16px;
 }

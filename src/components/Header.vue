@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from "vue";
-import Popover from "@/components/Popover.vue";
+import AccordionList from "./AccordionList.vue";
+
+defineProps({
+  columnDefs: Array,
+  filterColumns: Function,
+});
 
 const activeItem = ref(1);
 const navigationItems = ["Общее", "Товары", "Доп. расходы"];
@@ -36,7 +41,10 @@ const toggleList = () => {
           alt="Combined Shape"
         />
         <div class="popover_wrapper" v-show="isOpenList">
-          <Popover />
+          <AccordionList
+            :column-defs="columnDefs"
+            @filter-columns="filterColumns"
+          />
         </div>
       </div>
     </div>
@@ -85,6 +93,7 @@ const toggleList = () => {
   position: absolute;
   top: 26px;
   right: 0;
+  z-index: 2;
 }
 
 @media only screen and (max-width: 400px) {

@@ -1,10 +1,10 @@
 <script setup>
-import { appendCell } from "@/factory.js";
+defineEmits(["appendCell"]);
 </script>
 
 <template>
   <div class="add-line-block">
-    <button class="add-line-btn" @click="appendCell">
+    <button class="add-line-btn" @click="$emit('appendCell')">
       <img
         class="icon-plus"
         src="../assets/icons/312312313Combined Shape.svg"
