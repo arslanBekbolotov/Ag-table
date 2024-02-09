@@ -1,12 +1,12 @@
 <script setup>
 import AccordionItem from "@/components/AccordionItem.vue";
-import { ref, defineProps, watch } from "vue";
+import { ref, defineProps } from "vue";
 
 const props = defineProps({
   columnDefs: Array,
 });
 
-defineEmits(["filterColumns", "resetColumnDefs"]);
+defineEmits(["filterColumns"]);
 
 const columnDefsCopy = props.columnDefs;
 const activeItem = ref(-1);
@@ -47,9 +47,6 @@ const toggleAccordion = (index) => {
             :for="`checkbox_${index}_${colIndex}`"
             >{{ col.headerName ? col.headerName : col.field }}</label
           >
-        </div>
-        <div>
-          <button @click="$emit('resetColumnDefs')">Сбросить</button>
         </div>
       </AccordionItem>
     </ul>

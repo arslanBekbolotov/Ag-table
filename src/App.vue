@@ -9,7 +9,6 @@ import ActionCell from "@/components/ActionCell.vue";
 let products = [...new Array(4)].map((_, index) =>
   createOneRandomProduct(index + 1),
 );
-
 const rowData = ref(products);
 const sequenceRef = ref(sequence);
 const columnDefs = ref([
@@ -20,28 +19,52 @@ const columnDefs = ref([
     rowDrag: true,
     width: "50px",
     editable: false,
+    cellRenderer: null,
   },
   {
     colId: 2,
     field: "action",
     headerName: "Действие",
     width: "26px",
-    editable: false,
     cellRenderer: ActionCell,
+    editable: false,
   },
   {
     colId: 3,
     field: "unitType",
     headerName: "Наименование еденицы",
+    cellRendererParams: {
+      showSelect: true,
+    },
     flex: 1,
   },
-  { colId: 4, field: "price", headerName: "Цена" },
-  { colId: 5, field: "amount", headerName: "Кол-во" },
-  { colId: 6, field: "name", headerName: "Название товара" },
-  { colId: 7, field: "total", headerName: "Итого" },
+  {
+    colId: 4,
+    field: "price",
+    headerName: "Цена",
+  },
+  {
+    colId: 5,
+    field: "amount",
+    headerName: "Кол-во",
+  },
+  {
+    colId: 6,
+    field: "name",
+    headerName: "Название товара",
+    cellRendererParams: {
+      showSelect: true,
+    },
+  },
+  {
+    colId: 7,
+    field: "total",
+    headerName: "Итого",
+    cellEditorParams: {
+      showSelect: true,
+    },
+  },
 ]);
-
-const columnDefsCopy = columnDefs.value;
 
 // запрос на сервер что поменял порядок рядов
 const onRowDragEnd = (event) => {
@@ -77,36 +100,19 @@ const filterColumns = (col, checked) => {
   }
 };
 
-const resetColumnDef = () => {
-  columnDefs.value = columnDefsCopy;
-};
-
 // добавляю обратно колонку
 const appendColumn = (col) => {
   const part1 = columnDefs.value.splice(0, col.colId - 1);
   const part2 = columnDefs.value;
   columnDefs.value = [...part1, col, ...part2];
 };
-
-// удаления выбранных рядов
-// const removeSelectedCells = () => {
-//   const selectedNode = gridRef.value.api.getSelectedNodes();
-//   const selectedData = selectedNode.map((node) => node.data);
-//   gridRef.value.api.applyTransaction({
-//     remove: selectedData,
-//   });
-// };
 </script>
 
 <template>
   <div class="container content-wrapper">
     <div class="sidebar"></div>
     <div class="main-content">
-      <Header
-        :column-defs="columnDefs"
-        :filter-columns="filterColumns"
-        :reset-column-defs="resetColumnDef"
-      />
+      <Header :column-defs="columnDefs" :filter-columns="filterColumns" />
       <AddLine @appendCell="appendCell" />
       <Table
         :row-data="rowData"
@@ -115,7 +121,6 @@ const appendColumn = (col) => {
       />
     </div>
   </div>
-  <button>filterColumns</button>
 </template>
 
 <style scoped>

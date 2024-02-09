@@ -2,6 +2,7 @@
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
+import CombinedInput from "@/components/CombinedInput.vue";
 
 defineProps({
   rowData: Array,
@@ -13,6 +14,7 @@ const defaultColDef = {
   sortable: true,
   filter: true,
   editable: true,
+  cellRenderer: CombinedInput,
 };
 
 // запрос на сервер что поменял значение ячейки
@@ -40,7 +42,6 @@ const onCellValueChanged = () => {
       :onRowDragEnd="onRowDragEnd"
       style="height: 500px"
       :suppressDragLeaveHidesColumns="true"
-      editType="fullRow"
     >
     </ag-grid-vue>
   </div>

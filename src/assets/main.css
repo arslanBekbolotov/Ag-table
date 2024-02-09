@@ -27,11 +27,11 @@
 
 .ag-cell{
     cursor: pointer;
+    overflow: visible;
 }
 
 .ag-cell:nth-child(2){
     padding: 0;
-    overflow: visible !important;
 }
 
 .ag-column-first{
@@ -50,3 +50,9 @@
     width: 16px;
     height: 16px;
 }
+
+input:focus {
+    outline: none;
+    border: none;
+}
+
