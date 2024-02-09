@@ -5,6 +5,7 @@ import AccordionList from "./AccordionList.vue";
 defineProps({
   columnDefs: Array,
   filterColumns: Function,
+  resetColumnDefs: Function,
 });
 
 const activeItem = ref(1);
@@ -44,6 +45,7 @@ const toggleList = () => {
           <AccordionList
             :column-defs="columnDefs"
             @filter-columns="filterColumns"
+            @reset-column-defs="resetColumnDefs"
           />
         </div>
       </div>

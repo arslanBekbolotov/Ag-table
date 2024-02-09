@@ -14,6 +14,7 @@ const rowData = ref(products);
 const sequenceRef = ref(sequence);
 const columnDefs = ref([
   {
+    colId: 1,
     field: "order",
     headerName: "",
     rowDrag: true,
@@ -21,22 +22,26 @@ const columnDefs = ref([
     editable: false,
   },
   {
+    colId: 2,
     field: "action",
     headerName: "Действие",
-    width: "20px",
+    width: "26px",
     editable: false,
     cellRenderer: ActionCell,
   },
   {
+    colId: 3,
     field: "unitType",
     headerName: "Наименование еденицы",
     flex: 1,
   },
-  { field: "price", headerName: "Цена" },
-  { field: "amount", headerName: "Кол-во" },
-  { field: "name", headerName: "Название товара" },
-  { field: "total", headerName: "Итого" },
+  { colId: 4, field: "price", headerName: "Цена" },
+  { colId: 5, field: "amount", headerName: "Кол-во" },
+  { colId: 6, field: "name", headerName: "Название товара" },
+  { colId: 7, field: "total", headerName: "Итого" },
 ]);
+
+const columnDefsCopy = columnDefs.value;
 
 // запрос на сервер что поменял порядок рядов
 const onRowDragEnd = (event) => {
@@ -60,11 +65,30 @@ const appendCell = () => {
 };
 
 // должен был идти запрос на редактирования
-const filterColumns = (name) => {
-  columnDefs.value = columnDefs.value.filter((item) => item.field !== name);
+const filterColumns = (col, checked) => {
+  if (checked) {
+    columnDefs.value = columnDefs.value.filter(
+      (item) => item.colId !== col.colId,
+    );
+  }
+
+  if (!checked && col) {
+    appendColumn(col);
+  }
 };
 
-// //удаления выбранных рядов
+const resetColumnDef = () => {
+  columnDefs.value = columnDefsCopy;
+};
+
+// добавляю обратно колонку
+const appendColumn = (col) => {
+  const part1 = columnDefs.value.splice(0, col.colId - 1);
+  const part2 = columnDefs.value;
+  columnDefs.value = [...part1, col, ...part2];
+};
+
+// удаления выбранных рядов
 // const removeSelectedCells = () => {
 //   const selectedNode = gridRef.value.api.getSelectedNodes();
 //   const selectedData = selectedNode.map((node) => node.data);
@@ -78,7 +102,11 @@ const filterColumns = (name) => {
   <div class="container content-wrapper">
     <div class="sidebar"></div>
     <div class="main-content">
-      <Header :column-defs="columnDefs" @filter-columns="filterColumns" />
+      <Header
+        :column-defs="columnDefs"
+        :filter-columns="filterColumns"
+        :reset-column-defs="resetColumnDef"
+      />
       <AddLine @appendCell="appendCell" />
       <Table
         :row-data="rowData"
@@ -87,6 +115,7 @@ const filterColumns = (name) => {
       />
     </div>
   </div>
+  <button>filterColumns</button>
 </template>
 
 <style scoped>

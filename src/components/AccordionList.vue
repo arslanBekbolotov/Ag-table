@@ -1,18 +1,22 @@
 <script setup>
 import AccordionItem from "@/components/AccordionItem.vue";
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch } from "vue";
 
 const props = defineProps({
   columnDefs: Array,
 });
 
-defineEmits(["filterColumns"]);
+defineEmits(["filterColumns", "resetColumnDefs"]);
 
+const columnDefsCopy = props.columnDefs;
 const activeItem = ref(-1);
-const selectedColumns = ref(props.columnDefs);
+const selectedColumns = ref(columnDefsCopy);
 const list = [{ name: "Отображение столбцов" }, { name: "Порядок столбцов" }];
 
 const toggleAccordion = (index) => {
+  if (activeItem.value === index) {
+    activeItem.value = -1;
+  }
   activeItem.value = index;
 };
 </script>
@@ -29,20 +33,23 @@ const toggleAccordion = (index) => {
       >
         <div
           class="checkbox_wrapper"
-          v-for="(col, colIndex) in props.columnDefs"
+          v-for="(col, colIndex) in columnDefsCopy"
           :key="colIndex"
         >
           <input
             type="checkbox"
             :id="`checkbox_${index}_${colIndex}`"
             :checked="selectedColumns[colIndex][col.headerName]"
-            @change="$emit('filterColumns', colIndex)"
+            @change="$emit('filterColumns', col, $event.target.checked)"
           />
           <label
             class="checkbox_label"
             :for="`checkbox_${index}_${colIndex}`"
             >{{ col.headerName ? col.headerName : col.field }}</label
           >
+        </div>
+        <div>
+          <button @click="$emit('resetColumnDefs')">Сбросить</button>
         </div>
       </AccordionItem>
     </ul>

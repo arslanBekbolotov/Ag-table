@@ -29,6 +29,11 @@
     cursor: pointer;
 }
 
+.ag-cell:nth-child(2){
+    padding: 0;
+    overflow: visible !important;
+}
+
 .ag-column-first{
     display: flex !important;
     align-items: center !important;
