@@ -3,6 +3,7 @@ import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import CombinedInput from "@/components/CombinedInput.vue";
+import Overview from "@/components/Overview.vue";
 
 defineProps({
   rowData: Array,
@@ -40,10 +41,11 @@ const onCellValueChanged = () => {
       :rowDragMultiRow="true"
       rowSelection="multiple"
       :onRowDragEnd="onRowDragEnd"
-      style="height: 500px"
+      style="height: 220px"
       :suppressDragLeaveHidesColumns="true"
     >
     </ag-grid-vue>
+    <Overview />
   </div>
 </template>
 
