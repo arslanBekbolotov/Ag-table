@@ -71,7 +71,7 @@ const onCellValueChanged = (event) => {
   position: relative;
 }
 
-.action_popup {
+/*.action_popup {
   position: absolute;
   right: 0;
   top: 30px;
@@ -82,5 +82,5 @@ const onCellValueChanged = (event) => {
     inset 0 1px 2px 0 rgba(255, 255, 255, 0.5);
   background-color: #fff;
   padding: 7px 10px;
-}
+}*/
 </style>

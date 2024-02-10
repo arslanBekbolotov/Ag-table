@@ -108,8 +108,17 @@ const insertColumn = (col) => {
   columnDefs.value = [...part1, col, ...part2];
 };
 
+const updateUnitTypeList = (data) => {
+  rowData.value = rowData.value.map((item) => {
+    if (!item.unitType) {
+      return (item.unitType = data.unitType);
+    }
+    return item;
+  });
+};
+
 // обновляю результат после изменения ячейки
-const updateResult = (data) => {
+const updateRowData = (data) => {
   totalSum.value = rowData.value.reduce((prev, current) => {
     if (!current.total && data?.total) {
       return (prev += data.total);
@@ -133,13 +142,17 @@ const updateResult = (data) => {
 
     return (prev += current.amount);
   }, 0);
+
+  if (data?.unitType) {
+    updateUnitTypeList(data);
+  }
 };
 
 const toggleSidebar = () => {
   sidebarIsOpen.value = !sidebarIsOpen.value;
 };
 
-onBeforeMount(() => updateResult());
+onBeforeMount(() => updateRowData());
 </script>
 
 <template>
@@ -161,7 +174,7 @@ onBeforeMount(() => updateResult());
         :on-row-drag-end="onRowDragEnd"
         :total-amount="totalAmount"
         :total-sum="totalSum"
-        :updateResult="updateResult"
+        :updateResult="updateRowData"
       />
     </div>
   </div>
