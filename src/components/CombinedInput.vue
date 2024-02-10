@@ -16,8 +16,14 @@ const getValue = () => {
   return inputValue.value;
 };
 
+// запрос на сервер на иземение значения ячейки
 const handleChange = (event) => {
   inputValue.value = event.target.value;
+  if (props.params.colDef.cellDataType === "number") {
+    props.params.setValue(Number(inputValue.value));
+  } else {
+    props.params.setValue(inputValue.value);
+  }
   props.params.api.stopEditing();
 };
 

@@ -5,6 +5,7 @@ import AccordionList from "./AccordionList.vue";
 defineProps({
   columnDefs: Array,
   filterColumns: Function,
+  toggleSidebar: Function,
 });
 
 const activeItem = ref(1);
@@ -22,7 +23,15 @@ const toggleList = () => {
 
 <template>
   <div>
-    <h1 class="main-title">Проведение ТО и мелкий ремонт</h1>
+    <div class="row-content">
+      <img
+        @click="toggleSidebar"
+        class="burger-menu"
+        src="../assets/icons/32143241223Combined Shape.svg"
+        alt="burger-menu"
+      />
+      <h1 class="main-title">Проведение ТО и мелкий ремонт</h1>
+    </div>
     <div class="navbar">
       <ul class="navigation">
         <li
@@ -52,9 +61,19 @@ const toggleList = () => {
 </template>
 
 <style scoped>
+.row-content {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px 0;
+}
+
+.burger-menu {
+  display: none;
+  margin: 10px 25px 0 0;
+}
+
 .main-title {
   font-size: 30px;
-  margin: 16px 0;
 }
 
 .navbar {
@@ -99,6 +118,10 @@ const toggleList = () => {
 @media only screen and (max-width: 400px) {
   .gear_wrapper {
     display: none;
+  }
+
+  .burger-menu {
+    display: block;
   }
 }
 </style>

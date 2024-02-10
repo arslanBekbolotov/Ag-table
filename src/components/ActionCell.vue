@@ -26,4 +26,10 @@ const openActions = () => {
 .action_cell_icon {
   padding: 0 14px;
 }
+
+/*.action_cell_popup {
+  position: absolute;
+  z-index: 20;
+  top: 15px;
+}*/
 </style>

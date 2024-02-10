@@ -5,10 +5,13 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import CombinedInput from "@/components/CombinedInput.vue";
 import Overview from "@/components/Overview.vue";
 
-defineProps({
+const props = defineProps({
   rowData: Array,
   columnDefs: Array,
   onRowDragEnd: Function,
+  totalSum: Number,
+  totalAmount: Number,
+  updateResult: Function,
 });
 
 const defaultColDef = {
@@ -18,9 +21,8 @@ const defaultColDef = {
   cellRenderer: CombinedInput,
 };
 
-// запрос на сервер что поменял значение ячейки
-const onCellValueChanged = () => {
-  console.log("cell value changed");
+const onCellValueChanged = (event) => {
+  props.updateResult(event.data);
 };
 </script>
 
@@ -37,15 +39,19 @@ const onCellValueChanged = () => {
       class="ag-theme-quartz"
       :animateRows="true"
       :rowDragManaged="true"
-      :onCellValueChanged="onCellValueChanged"
       :rowDragMultiRow="true"
       rowSelection="multiple"
+      :onCellValueChanged="onCellValueChanged"
       :onRowDragEnd="onRowDragEnd"
-      style="height: 220px"
+      domLayout="autoHeight"
       :suppressDragLeaveHidesColumns="true"
     >
     </ag-grid-vue>
-    <Overview />
+    <Overview
+      :row-data="rowData"
+      :total-sum="totalSum"
+      :total-amount="totalAmount"
+    />
   </div>
 </template>
 
@@ -62,5 +68,19 @@ const onCellValueChanged = () => {
   cursor: pointer;
   border-bottom: 1px solid #eeeff1;
   text-align: end;
+  position: relative;
+}
+
+.action_popup {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  z-index: 3;
+  border-radius: 5px;
+  box-shadow:
+    0 0 3px 0 #000,
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.5);
+  background-color: #fff;
+  padding: 7px 10px;
 }
 </style>

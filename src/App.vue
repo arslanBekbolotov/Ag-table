@@ -2,15 +2,19 @@
 import Header from "@/components/Header.vue";
 import AddLine from "@/components/AddLine.vue";
 import Table from "@/components/Table.vue";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { createOneRandomProduct, sequence } from "@/factory.js";
 import ActionCell from "@/components/ActionCell.vue";
 
 let products = [...new Array(4)].map((_, index) =>
   createOneRandomProduct(index + 1),
 );
+
 const rowData = ref(products);
 const sequenceRef = ref(sequence);
+const sidebarIsOpen = ref(false);
+const totalSum = ref(0);
+const totalAmount = ref(0);
 const columnDefs = ref([
   {
     colId: 1,
@@ -60,9 +64,6 @@ const columnDefs = ref([
     colId: 7,
     field: "total",
     headerName: "Итого",
-    cellEditorParams: {
-      showSelect: true,
-    },
   },
 ]);
 
@@ -96,28 +97,71 @@ const filterColumns = (col, checked) => {
   }
 
   if (!checked && col) {
-    appendColumn(col);
+    insertColumn(col);
   }
 };
 
 // добавляю обратно колонку
-const appendColumn = (col) => {
+const insertColumn = (col) => {
   const part1 = columnDefs.value.splice(0, col.colId - 1);
   const part2 = columnDefs.value;
   columnDefs.value = [...part1, col, ...part2];
 };
+
+// обновляю результат после изменения ячейки
+const updateResult = (data) => {
+  totalSum.value = rowData.value.reduce((prev, current) => {
+    if (!current.total && data?.total) {
+      return (prev += data.total);
+    }
+
+    if (!data?.total && !current.total) {
+      return prev;
+    }
+
+    return (prev += current.total);
+  }, 0);
+
+  totalAmount.value = rowData.value.reduce((prev, current) => {
+    if (!current.amount && data?.amount) {
+      return (prev += data.amount);
+    }
+
+    if (!data?.amount && !current.amount) {
+      return prev;
+    }
+
+    return (prev += current.amount);
+  }, 0);
+};
+
+const toggleSidebar = () => {
+  sidebarIsOpen.value = !sidebarIsOpen.value;
+};
+
+onBeforeMount(() => updateResult());
 </script>
 
 <template>
   <div class="container content-wrapper">
-    <div class="sidebar"></div>
+    <div
+      :class="{ sidebar: true, active_sidebar: sidebarIsOpen }"
+      @click="toggleSidebar"
+    ></div>
     <div class="main-content">
-      <Header :column-defs="columnDefs" :filter-columns="filterColumns" />
+      <Header
+        :column-defs="columnDefs"
+        :filter-columns="filterColumns"
+        :toggle-sidebar="toggleSidebar"
+      />
       <AddLine @appendCell="appendCell" />
       <Table
         :row-data="rowData"
         :column-defs="columnDefs"
         :on-row-drag-end="onRowDragEnd"
+        :total-amount="totalAmount"
+        :total-sum="totalSum"
+        :updateResult="updateResult"
       />
     </div>
   </div>
@@ -132,6 +176,7 @@ const appendColumn = (col) => {
   min-width: 229px;
   height: 100vh;
   background-image: radial-gradient(circle at 29% 0, #000, #1c2734 103%);
+  transition: transform 0.5s ease-in-out;
 }
 
 .main-content {
@@ -140,8 +185,18 @@ const appendColumn = (col) => {
 }
 
 @media only screen and (max-width: 1000px) {
+  .main-content {
+    padding: 10px;
+  }
+
   .sidebar {
-    display: none;
+    position: absolute;
+    transform: translateX(-200%);
+    z-index: 3;
+  }
+
+  .active_sidebar {
+    transform: translateX(0);
   }
 }
 </style>

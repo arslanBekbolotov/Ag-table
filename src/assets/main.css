@@ -24,14 +24,20 @@
     font-size: 16px;
     font-weight: 600;
 }
+.ag-row{
+    border-bottom: none !important;
+}
 
 .ag-cell{
     cursor: pointer;
-    overflow: visible;
 }
 
 .ag-cell:nth-child(2){
     padding: 0;
+}
+
+.ag-cell-value{
+    overflow: visible !important;
 }
 
 .ag-column-first{
